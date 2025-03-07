@@ -1,0 +1,10 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "react-native-otp-reader": ["../src/index"],
+      "react-native-otp-reader/*": ["../src/*"]
+    }
+  }
+}
