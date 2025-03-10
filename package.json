@@ -21,13 +21,13 @@
     "react-native-otp-detector",
     "ReactNativeOtpDetector"
   ],
-  "repository": "https://github.com/Arjit222830/react-native-otp-detector",
+  "repository": "https://github.com/Arjit0762/react-native-otp-detector",
   "bugs": {
-    "url": "https://github.com/Arjit222830/react-native-otp-detector/issues"
+    "url": "https://github.com/Arjit0762/react-native-otp-detector/issues"
   },
-  "author": "Arjit0762 <arjitbhandari222830@gmail.com> (https://github.com/Arjit222830)",
+  "author": "Arjit0762 <arjitbhandari222830@gmail.com> (https://github.com/Arjit0762)",
   "license": "MIT",
-  "homepage": "https://github.com/Arjit222830/react-native-otp-detector#readme",
+  "homepage": "https://github.com/Arjit0762/react-native-otp-detector#readme",
   "dependencies": {},
   "devDependencies": {
     "@types/react": "~18.3.12",
