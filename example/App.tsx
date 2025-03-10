@@ -32,24 +32,7 @@ export default function App() {
 
   const sendOtp = async () => {
     //write your api to send otp here
-    /*
-    const payload = {
-      country_code: "+91",
-      mobile: phone,
-      user_type: "buyer"
-    };
 
-    const response = await fetch(
-      `https://auth-service-rzjw2jx3vq-el.a.run.app/api/auth/v2/otp`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      }
-    );
-    */
     setIsOtpSend(true);
   };
 
