@@ -26,25 +26,20 @@ class ReactNativeOtpDetectorModule : Module() {
             val task = client.startSmsUserConsent(null)
 
             task.addOnSuccessListener {
-                Log.d("SmsConsent", "Started SMS consent listener")
 
                 // Register BroadcastReceiver dynamically
                 smsReceiver = ReactNativeOtpDetectorBroadcast { intent ->
-                    Log.d("SmsConsent", "Received Consent Intent, launching user consent")
                     activity.startActivityForResult(intent, 12345)
                 }
         
 
                 val intentFilter = IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION)
-                Log.d("IntentFilter", "Intent filter created: $intentFilter")
 
                 try {
                    
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // Android 13+
-                        Log.d("SmsReceiver", "Registering receiver with RECEIVER_NOT_EXPORTED for Android 13+")
                         activity.registerReceiver(smsReceiver, intentFilter, Context.RECEIVER_EXPORTED)
                     } else {
-                        Log.d("SmsReceiver", "Registering receiver normally for Android <13")
                         activity.registerReceiver(smsReceiver, intentFilter)
                     }
                     
@@ -63,7 +58,6 @@ class ReactNativeOtpDetectorModule : Module() {
             val data: Intent? = payload.data
         
             if (data != null) {
-                Log.d("AppActivity", "Received intent: ${data.toUri(Intent.URI_INTENT_SCHEME)}")
         
                 if (requestCode == 12345 && resultCode == Activity.RESULT_OK) {
                     val message = data.getStringExtra(SmsRetriever.EXTRA_SMS_MESSAGE) ?: ""
@@ -73,7 +67,6 @@ class ReactNativeOtpDetectorModule : Module() {
                     val extractedOtp = otpRegex.find(message)?.value
         
                     if (!message.isNullOrEmpty() && extractedOtp != null) {
-                        Log.d("AppActivity", "Extracted OTP message: $message")
                         sendEvent("onSmsReceived", mapOf("otp" to extractedOtp))
                         unregisterReceiver()
                     } else {
@@ -93,7 +86,6 @@ class ReactNativeOtpDetectorModule : Module() {
         if (smsReceiver != null && activity != null) {
             try {
                 activity.unregisterReceiver(smsReceiver)
-                Log.d("SmsReceiver", "Broadcast receiver unregistered")
             } catch (e: IllegalArgumentException) {
                 Log.w("SmsReceiver", "Broadcast receiver was not registered")
             } catch (e: Exception) {

@@ -30,9 +30,8 @@ export default function App() {
   }, []);
 
   const sendOtp = async () => {
-    //write your api to send otp here
-
     setIsOtpSend(true);
+    //write your api to send otp here
   };
 
   return (
@@ -76,7 +75,7 @@ export default function App() {
             <Button
               title="Send Otp"
               onPress={async () => {
-                console.log(await ReactNativeOtpDetector.startSmsConsent());
+                ReactNativeOtpDetector.startSmsConsent();
                 sendOtp();
               }}
             />
