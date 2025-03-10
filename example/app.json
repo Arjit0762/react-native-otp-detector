@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "react-native-otp-reader-example",
-    "slug": "react-native-otp-reader-example",
+    "name": "react-native-otp-detector-example",
+    "slug": "react-native-otp-detector-example",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -14,14 +14,14 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "expo.modules.otpreader.example"
+      "bundleIdentifier": "expo.modules.otpdetector.example"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "expo.modules.otpreader.example"
+      "package": "expo.modules.otpdetector.example"
     },
     "web": {
       "favicon": "./assets/favicon.png"

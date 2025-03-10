@@ -1,5 +1,5 @@
 {
-  "name": "react-native-otp-reader",
+  "name": "react-native-otp-detector",
   "version": "0.1.0",
   "description": "Package to read otp in android",
   "main": "build/index.js",
@@ -18,16 +18,16 @@
   "keywords": [
     "react-native",
     "expo",
-    "react-native-otp-reader",
-    "ReactNativeOtpReader"
+    "react-native-otp-detector",
+    "ReactNativeOtpDetector"
   ],
-  "repository": "https://github.com/Arjit222830/react-native-otp-reader",
+  "repository": "https://github.com/Arjit222830/react-native-otp-detector",
   "bugs": {
-    "url": "https://github.com/Arjit222830/react-native-otp-reader/issues"
+    "url": "https://github.com/Arjit222830/react-native-otp-detector/issues"
   },
   "author": "Arjit0762 <arjitbhandari222830@gmail.com> (https://github.com/Arjit222830)",
   "license": "MIT",
-  "homepage": "https://github.com/Arjit222830/react-native-otp-reader#readme",
+  "homepage": "https://github.com/Arjit222830/react-native-otp-detector#readme",
   "dependencies": {},
   "devDependencies": {
     "@types/react": "~18.3.12",

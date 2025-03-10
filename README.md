@@ -1,11 +1,11 @@
-# react-native-otp-reader
+# react-native-otp-detector
 
 Package to read otp in android
 
 # API documentation
 
-- [Documentation for the latest stable release](https://docs.expo.dev/versions/latest/sdk/react-native-otp-reader/)
-- [Documentation for the main branch](https://docs.expo.dev/versions/unversioned/sdk/react-native-otp-reader/)
+- [Documentation for the latest stable release](https://docs.expo.dev/versions/latest/sdk/react-native-otp-detector/)
+- [Documentation for the main branch](https://docs.expo.dev/versions/unversioned/sdk/react-native-otp-detector/)
 
 # Installation in managed Expo projects
 
@@ -18,7 +18,7 @@ For bare React Native projects, you must ensure that you have [installed and con
 ### Add the package to your npm dependencies
 
 ```
-npm install react-native-otp-reader
+npm install react-native-otp-detector
 ```
 
 ### Configure for Android

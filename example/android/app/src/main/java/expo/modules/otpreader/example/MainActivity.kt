@@ -1,4 +1,4 @@
-package expo.modules.otpreader.example
+package expo.modules.otpdetector.example
 
 import android.os.Build
 import android.os.Bundle

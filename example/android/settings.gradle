@@ -21,7 +21,7 @@ extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
   }
 }
 
-rootProject.name = 'react-native-otp-reader-example'
+rootProject.name = 'react-native-otp-detector-example'
 
 dependencyResolutionManagement {
   versionCatalogs {

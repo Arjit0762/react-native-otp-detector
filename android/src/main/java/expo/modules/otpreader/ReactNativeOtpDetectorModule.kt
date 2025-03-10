@@ -1,4 +1,4 @@
-package expo.modules.otpreader
+package expo.modules.otpdetector
 
 import android.app.Activity
 import android.content.Intent
@@ -12,11 +12,11 @@ import expo.modules.kotlin.modules.ModuleDefinition
 import android.os.Build
 import android.content.Context
 
-class ReactNativeOtpReaderModule : Module() {
-    private var smsReceiver: ReactNativeOtpReaderBroadcast? = null
+class ReactNativeOtpDetectorModule : Module() {
+    private var smsReceiver: ReactNativeOtpDetectorBroadcast? = null
 
     override fun definition() = ModuleDefinition {
-        Name("ReactNativeOtpReader")
+        Name("ReactNativeOtpDetector")
 
         Function("startSmsConsent") {
             val activity = appContext.activityProvider?.currentActivity
@@ -29,7 +29,7 @@ class ReactNativeOtpReaderModule : Module() {
                 Log.d("SmsConsent", "Started SMS consent listener")
 
                 // Register BroadcastReceiver dynamically
-                smsReceiver = ReactNativeOtpReaderBroadcast { intent ->
+                smsReceiver = ReactNativeOtpDetectorBroadcast { intent ->
                     Log.d("SmsConsent", "Received Consent Intent, launching user consent")
                     activity.startActivityForResult(intent, 12345)
                 }

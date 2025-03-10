@@ -1,4 +1,4 @@
-package expo.modules.otpreader
+package expo.modules.otpdetector
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -8,7 +8,7 @@ import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
 
-class ReactNativeOtpReaderBroadcast(private val callback: (Intent?) -> Unit) : BroadcastReceiver() {
+class ReactNativeOtpDetectorBroadcast(private val callback: (Intent?) -> Unit) : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         Log.d("SmsBroadcastReceiver", "onReceive triggered with action: ${intent.action}")
     

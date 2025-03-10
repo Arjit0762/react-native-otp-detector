@@ -86,9 +86,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'expo.modules.otpreader.example'
+    namespace 'expo.modules.otpdetector.example'
     defaultConfig {
-        applicationId 'expo.modules.otpreader.example'
+        applicationId 'expo.modules.otpdetector.example'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

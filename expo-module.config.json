@@ -1,17 +1,9 @@
 {
-  "platforms": [
-    "apple",
-    "android",
-    "web"
-  ],
+  "platforms": ["apple", "android", "web"],
   "apple": {
-    "modules": [
-      "ReactNativeOtpReaderModule"
-    ]
+    "modules": ["ReactNativeOtpDetectorModule"]
   },
   "android": {
-    "modules": [
-      "expo.modules.otpreader.ReactNativeOtpReaderModule"
-    ]
+    "modules": ["expo.modules.otpdetector.ReactNativeOtpDetectorModule"]
   }
 }

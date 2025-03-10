@@ -4,7 +4,7 @@ export type OnLoadEventPayload = {
   url: string;
 };
 
-export type ReactNativeOtpReaderModuleEvents = {
+export type ReactNativeOtpDetectorModuleEvents = {
   onSmsReceived: (params: SmsReceivedPayload) => void;
 };
 

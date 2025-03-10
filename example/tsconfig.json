@@ -3,8 +3,8 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
-      "react-native-otp-reader": ["../src/index"],
-      "react-native-otp-reader/*": ["../src/*"]
+      "react-native-otp-detector": ["../src/index"],
+      "react-native-otp-detector/*": ["../src/*"]
     }
   }
 }

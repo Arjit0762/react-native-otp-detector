@@ -1,19 +1,19 @@
-const createConfigAsync = require('@expo/webpack-config');
-const path = require('path');
+const createConfigAsync = require("@expo/webpack-config");
+const path = require("path");
 
 module.exports = async (env, argv) => {
   const config = await createConfigAsync(
     {
       ...env,
       babel: {
-        dangerouslyAddModulePathsToTranspile: ['react-native-otp-reader'],
-      },
+        dangerouslyAddModulePathsToTranspile: ["react-native-otp-detector"]
+      }
     },
     argv
   );
   config.resolve.modules = [
-    path.resolve(__dirname, './node_modules'),
-    path.resolve(__dirname, '../node_modules'),
+    path.resolve(__dirname, "./node_modules"),
+    path.resolve(__dirname, "../node_modules")
   ];
 
   return config;

@@ -1544,7 +1544,7 @@ PODS:
     - React-logger (= 0.76.7)
     - React-perflogger (= 0.76.7)
     - React-utils (= 0.76.7)
-  - ReactNativeOtpReader (0.1.0):
+  - ReactNativeOtpDetector (0.1.0):
     - ExpoModulesCore
   - SocketRocket (0.7.1)
   - Yoga (0.0.0)
@@ -1621,7 +1621,7 @@ DEPENDENCIES:
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - ReactNativeOtpReader (from `../../ios`)
+  - ReactNativeOtpDetector (from `../../ios`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -1768,7 +1768,7 @@ EXTERNAL SOURCES:
     :path: build/generated/ios
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
-  ReactNativeOtpReader:
+  ReactNativeOtpDetector:
     :path: "../../ios"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
@@ -1843,7 +1843,7 @@ SPEC CHECKSUMS:
   React-utils: 0342746d2cf989cf5e0d1b84c98cfa152edbdf3f
   ReactCodegen: e1c019dc68733dd2c5d3b263b4a6dc72002c0045
   ReactCommon: 81e0744ee33adfd6d586141b927024f488bc49ea
-  ReactNativeOtpReader: 59ef1bf4dfc182bc7b12ad80877bc41211857512
+  ReactNativeOtpDetector: 59ef1bf4dfc182bc7b12ad80877bc41211857512
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 90d80701b27946c4b23461c00a7207f300a6ff71
 

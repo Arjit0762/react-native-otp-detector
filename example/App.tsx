@@ -1,5 +1,4 @@
-import { useEvent } from "expo";
-import ReactNativeOtpReader from "react-native-otp-reader";
+import ReactNativeOtpDetector from "react-native-otp-detector";
 import { Button, SafeAreaView, ScrollView, Text, View } from "react-native";
 import InputPhone from "./InputPhone/InputPhone";
 import { useEffect, useState } from "react";
@@ -14,7 +13,7 @@ export default function App() {
 
   useEffect(() => {
     // Listen for OTP event
-    const eventListener = ReactNativeOtpReader.addListener(
+    const eventListener = ReactNativeOtpDetector.addListener(
       "onSmsReceived",
       event => {
         console.log("OTP Event Received:", event);
@@ -77,7 +76,7 @@ export default function App() {
             <Button
               title="Send Otp"
               onPress={async () => {
-                console.log(await ReactNativeOtpReader.startSmsConsent());
+                console.log(await ReactNativeOtpDetector.startSmsConsent());
                 sendOtp();
               }}
             />

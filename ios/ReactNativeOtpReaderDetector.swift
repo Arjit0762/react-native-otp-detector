@@ -1,11 +1,11 @@
 import ExpoModulesCore
 
-public class ReactNativeOtpReaderModule: Module {
+public class ReactNativeOtpDetectorModule: Module {
   public func definition() -> ModuleDefinition {
-    Name("ReactNativeOtpReader")
+    Name("ReactNativeOtpDetector")
 
     Function("startSmsConsent") { (callback: (String) -> Void) in
-      let message = "ReactNativeOtpReader: startSmsConsent is not available on iOS."
+      let message = "ReactNativeOtpDetector: startSmsConsent is not available on iOS."
       print(message)
       callback(message) // Send the message back to JavaScript
 
