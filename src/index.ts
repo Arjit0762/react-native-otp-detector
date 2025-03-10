@@ -1,5 +1,4 @@
-// Reexport the native module. On web, it will be resolved to ReactNativeOtpReaderModule.web.ts
-// and on native platforms to ReactNativeOtpReaderModule.ts
-export { default } from './ReactNativeOtpReaderModule';
-export { default as ReactNativeOtpReaderView } from './ReactNativeOtpReaderView';
-export * from  './ReactNativeOtpReader.types';
+// Reexport the native module. On web, it will be resolved to ReactNativeModuleTestModule.web.ts
+// and on native platforms to ReactNativeModuleTestModule.ts
+export { default } from "./ReactNativeOtpReaderModule";
+export * from "./ReactNativeOtpReader.types";

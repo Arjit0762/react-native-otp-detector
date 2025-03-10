@@ -1,12 +1,14 @@
-import { NativeModule, requireNativeModule } from 'expo';
+import { NativeModule, requireNativeModule } from "expo";
 
-import { ReactNativeOtpReaderModuleEvents } from './ReactNativeOtpReader.types';
+import { ReactNativeOtpReaderModuleEvents } from "./ReactNativeOtpReader.types";
 
-declare class ReactNativeOtpReaderModule extends NativeModule<ReactNativeOtpReaderModuleEvents> {
-  PI: number;
-  hello(): string;
-  setValueAsync(value: string): Promise<void>;
+declare class ReactNativeOtpReaderModule extends NativeModule<
+  ReactNativeOtpReaderModuleEvents
+> {
+  startSmsConsent(): string;
 }
 
 // This call loads the native module object from the JSI.
-export default requireNativeModule<ReactNativeOtpReaderModule>('ReactNativeOtpReader');
+export default requireNativeModule<ReactNativeOtpReaderModule>(
+  "ReactNativeOtpReader"
+);

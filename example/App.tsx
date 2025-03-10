@@ -1,37 +1,104 @@
-import { useEvent } from 'expo';
-import ReactNativeOtpReader, { ReactNativeOtpReaderView } from 'react-native-otp-reader';
-import { Button, SafeAreaView, ScrollView, Text, View } from 'react-native';
+import { useEvent } from "expo";
+import ReactNativeOtpReader from "react-native-otp-reader";
+import { Button, SafeAreaView, ScrollView, Text, View } from "react-native";
+import InputPhone from "./InputPhone/InputPhone";
+import { useEffect, useState } from "react";
+import OtpInput from "./InputPhone/OtpInput";
 
 export default function App() {
-  const onChangePayload = useEvent(ReactNativeOtpReader, 'onChange');
+  const [phone, setPhone] = useState("");
+  const [error, setError] = useState({ show: false, message: "" });
+  const [isOtpSend, setIsOtpSend] = useState<boolean>(false);
+  const [otp, setOtp] = useState<string>("31212");
+  const [otpAutoFillValue, setOtpAutoFillValue] = useState<string>("");
+
+  useEffect(() => {
+    // Listen for OTP event
+    const eventListener = ReactNativeOtpReader.addListener(
+      "onSmsReceived",
+      event => {
+        console.log("OTP Event Received:", event);
+        if (event?.otp) {
+          console.log("otp", event?.otp);
+          setOtpAutoFillValue(event?.otp);
+        }
+      }
+    );
+
+    return () => {
+      eventListener.remove(); // Clean up listener on unmount
+    };
+  }, []);
+
+  const sendOtp = async () => {
+    //write your api to send otp here
+    /*
+    const payload = {
+      country_code: "+91",
+      mobile: phone,
+      user_type: "buyer"
+    };
+
+    const response = await fetch(
+      `https://auth-service-rzjw2jx3vq-el.a.run.app/api/auth/v2/otp`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      }
+    );
+    */
+    setIsOtpSend(true);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.container}>
-        <Text style={styles.header}>Module API Example</Text>
-        <Group name="Constants">
-          <Text>{ReactNativeOtpReader.PI}</Text>
-        </Group>
+        <Text style={styles.header}>User Consent API</Text>
+
         <Group name="Functions">
-          <Text>{ReactNativeOtpReader.hello()}</Text>
-        </Group>
-        <Group name="Async functions">
-          <Button
-            title="Set value"
-            onPress={async () => {
-              await ReactNativeOtpReader.setValueAsync('Hello from JS!');
-            }}
-          />
-        </Group>
-        <Group name="Events">
-          <Text>{onChangePayload?.value}</Text>
-        </Group>
-        <Group name="Views">
-          <ReactNativeOtpReaderView
-            url="https://www.example.com"
-            onLoad={({ nativeEvent: { url } }) => console.log(`Loaded: ${url}`)}
-            style={styles.view}
-          />
+          {isOtpSend ? (
+            <OtpInput
+              digitCount={6}
+              otpAutoFillValue={otpAutoFillValue}
+              setValue={value => {
+                setOtp(value);
+              }}
+            />
+          ) : (
+            <InputPhone
+              phone={phone}
+              setPhone={value => {
+                setPhone(value);
+              }}
+              error={error}
+              onChange={() => {
+                setError({
+                  show: false,
+                  message: ""
+                });
+              }}
+            />
+          )}
+
+          {isOtpSend ? (
+            <Button
+              title="Verify Otp"
+              onPress={async () => {
+                //
+              }}
+            />
+          ) : (
+            <Button
+              title="Send Otp"
+              onPress={async () => {
+                console.log(await ReactNativeOtpReader.startSmsConsent());
+                sendOtp();
+              }}
+            />
+          )}
         </Group>
       </ScrollView>
     </SafeAreaView>
@@ -50,24 +117,24 @@ function Group(props: { name: string; children: React.ReactNode }) {
 const styles = {
   header: {
     fontSize: 30,
-    margin: 20,
+    margin: 20
   },
   groupHeader: {
     fontSize: 20,
-    marginBottom: 20,
+    marginBottom: 20
   },
   group: {
     margin: 20,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 10,
-    padding: 20,
+    padding: 20
   },
   container: {
     flex: 1,
-    backgroundColor: '#eee',
+    backgroundColor: "#eee"
   },
   view: {
     flex: 1,
-    height: 200,
-  },
+    height: 200
+  }
 };

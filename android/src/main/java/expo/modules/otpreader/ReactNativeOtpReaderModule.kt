@@ -1,50 +1,125 @@
 package expo.modules.otpreader
 
+import android.app.Activity
+import android.content.Intent
+import android.content.IntentFilter
+import android.util.Log
+import com.google.android.gms.auth.api.phone.SmsRetriever
+import com.google.android.gms.auth.api.phone.SmsRetrieverClient
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
-import java.net.URL
+
+import android.os.Build
+import android.content.Context
 
 class ReactNativeOtpReaderModule : Module() {
-  // Each module class must implement the definition function. The definition consists of components
-  // that describes the module's functionality and behavior.
-  // See https://docs.expo.dev/modules/module-api for more details about available components.
-  override fun definition() = ModuleDefinition {
-    // Sets the name of the module that JavaScript code will use to refer to the module. Takes a string as an argument.
-    // Can be inferred from module's class name, but it's recommended to set it explicitly for clarity.
-    // The module will be accessible from `requireNativeModule('ReactNativeOtpReader')` in JavaScript.
-    Name("ReactNativeOtpReader")
+    private var smsReceiver: ReactNativeOtpReaderBroadcast? = null
 
-    // Sets constant properties on the module. Can take a dictionary or a closure that returns a dictionary.
-    Constants(
-      "PI" to Math.PI
-    )
+    override fun definition() = ModuleDefinition {
+        Name("ReactNativeOtpReader")
 
-    // Defines event names that the module can send to JavaScript.
-    Events("onChange")
+        Function("startSmsConsent") {
+            val activity = appContext.activityProvider?.currentActivity
+                ?: throw Exception("Activity is null")
 
-    // Defines a JavaScript synchronous function that runs the native code on the JavaScript thread.
-    Function("hello") {
-      "Hello world! 👋"
+            val client: SmsRetrieverClient = SmsRetriever.getClient(activity)
+            val task = client.startSmsUserConsent(null)
+
+            task.addOnSuccessListener {
+                Log.d("SmsConsent", "Started SMS consent listener")
+
+                // Register BroadcastReceiver dynamically
+                smsReceiver = ReactNativeOtpReaderBroadcast { intent ->
+                    Log.d("SmsConsent", "Received Consent Intent, launching user consent")
+                    activity.startActivityForResult(intent, 12345)
+                }
+        
+
+                val intentFilter = IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION)
+                Log.d("IntentFilter", "Intent filter created: $intentFilter")
+
+                try {
+                   
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // Android 13+
+                        Log.d("SmsReceiver", "Registering receiver with RECEIVER_NOT_EXPORTED for Android 13+")
+                        activity.registerReceiver(smsReceiver, intentFilter, Context.RECEIVER_EXPORTED)
+                    } else {
+                        Log.d("SmsReceiver", "Registering receiver normally for Android <13")
+                        activity.registerReceiver(smsReceiver, intentFilter)
+                    }
+                    
+                    Log.d("SmsReceiver", "Broadcast receiver registered successfully")
+                } catch (e: Exception) {
+                    Log.e("SmsReceiver", "Error while registering BroadcastReceiver: ${e.message}", e)
+                }
+            }
+        }
+
+        Events("onSmsReceived")
+
+        OnActivityResult { activity, payload ->
+            val requestCode = payload.requestCode
+            val resultCode = payload.resultCode
+            val data: Intent? = payload.data
+        
+            if (data != null) {
+                Log.d("AppActivity", "Received intent: ${data.toUri(Intent.URI_INTENT_SCHEME)}")
+        
+                if (requestCode == 12345 && resultCode == Activity.RESULT_OK) {
+                    val message = data.getStringExtra(SmsRetriever.EXTRA_SMS_MESSAGE) ?: ""
+                    
+                    // Ensure the message is not empty and contains an OTP
+                    val otpRegex = Regex("\\b\\d{6}\\b") // Matches a 6-digit OTP
+                    val extractedOtp = otpRegex.find(message)?.value
+        
+                    if (!message.isNullOrEmpty() && extractedOtp != null) {
+                        Log.d("AppActivity", "Extracted OTP message: $message")
+                        sendEvent("onSmsReceived", mapOf("otp" to extractedOtp))
+                        unregisterReceiver()
+                    } else {
+                        Log.e("AppActivity", "SMS does not contain a valid OTP")
+                    }
+                } else {
+                    Log.e("AppActivity", "Invalid requestCode ($requestCode) or resultCode ($resultCode)")
+                }
+            } else {
+                Log.e("App Change Log", "No data received from SMS Retriever")
+            }
+        }        
     }
 
-    // Defines a JavaScript function that always returns a Promise and whose native code
-    // is by default dispatched on the different thread than the JavaScript runtime runs on.
-    AsyncFunction("setValueAsync") { value: String ->
-      // Send an event to JavaScript.
-      sendEvent("onChange", mapOf(
-        "value" to value
-      ))
+    private fun unregisterReceiver() {
+        val activity = appContext.activityProvider?.currentActivity
+        if (smsReceiver != null && activity != null) {
+            try {
+                activity.unregisterReceiver(smsReceiver)
+                Log.d("SmsReceiver", "Broadcast receiver unregistered")
+            } catch (e: IllegalArgumentException) {
+                Log.w("SmsReceiver", "Broadcast receiver was not registered")
+            } catch (e: Exception) {
+                Log.e("SmsReceiver", "Error unregistering receiver: ${e.message}", e)
+            }
+            smsReceiver = null
+        }
     }
 
-    // Enables the module to be used as a native view. Definition components that are accepted as part of
-    // the view definition: Prop, Events.
-    View(ReactNativeOtpReaderView::class) {
-      // Defines a setter for the `url` prop.
-      Prop("url") { view: ReactNativeOtpReaderView, url: URL ->
-        view.webView.loadUrl(url.toString())
-      }
-      // Defines an event that the view can send to JavaScript.
-      Events("onLoad")
+    private fun extractOtp(message: String, regex: String): String {
+        val otpRegex = Regex(regex)
+        return otpRegex.find(message)?.value ?: ""
     }
-  }
+
+    private fun getOtpRegex(arguments: Map<String, Any?>?): String {
+        var regex = "\\d{6}" // Default 6 digit regex
+        if (arguments != null) {
+            val otpLength = arguments["otpLength"] as? Int
+            val customRegex = arguments["otpRegex"] as? String
+
+            if (customRegex != null && customRegex.isNotEmpty()) {
+                regex = customRegex
+            } else if (otpLength != null && otpLength > 0) {
+                regex = "\\d{$otpLength}"
+            }
+        }
+        return regex
+    }
 }
