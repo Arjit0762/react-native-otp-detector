@@ -110,6 +110,9 @@ const OtpInput: React.FC<OtpInputProps> = ({
           onFocus={() => handleFocus(index)}
           ref={ref => (refs.current[index] = ref as TextInput)}
           autoComplete="sms-otp"
+          // iOS has no programmatic SMS API — this surfaces the code from Messages
+          // as a QuickType keyboard suggestion (the recommended iOS path).
+          textContentType="oneTimeCode"
           {...inputProps}
         />
       ))}

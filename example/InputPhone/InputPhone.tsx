@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
   },
   textBoxContainer: {
     alignItems: "center",
-    backgroundColor: "whit",
+    backgroundColor: "white",
     borderColor: "grey",
     borderRadius: 8,
     borderWidth: 1,

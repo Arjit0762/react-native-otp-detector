@@ -43,6 +43,8 @@ android {
 }
 
 dependencies {
-  implementation 'com.google.android.gms:play-services-auth:21.3.0'
+  // Provides SmsRetriever / SmsRetrieverClient (both startSmsUserConsent and startSmsRetriever).
+  // CommonStatusCodes / Status come transitively via play-services-base. The Google Sign-In
+  // library (play-services-auth) is intentionally not included — it is not used here.
   implementation 'com.google.android.gms:play-services-auth-api-phone:18.1.0'
 }
