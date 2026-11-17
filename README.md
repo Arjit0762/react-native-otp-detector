@@ -20,6 +20,12 @@
   <a href="https://developers.google.com/identity/sms-retriever/user-consent/overview">SMS User Consent</a> APIs
 </p>
 
+<p align="center">
+  <strong>Sponsored by</strong><br><br>
+  <a href="https://www.zooplive.com/"><img alt="Zoop" src="./.github/assets/zoop-logo.svg" width="200"></a><br><br>
+  India's live auction app for real brands. <a href="https://www.zooplive.com/">zooplive.com</a>
+</p>
+
 ---
 
 ## Why this library
