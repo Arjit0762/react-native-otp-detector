@@ -1,12 +1,12 @@
 name: Release
 
 # Stages the package on npm when main's package.json has a version that isn't
-# on npm yet and the commit builds: the package itself and the Android example.
-# The version goes live when a maintainer approves it on npmjs.com, in the
-# package's Staged Packages tab, with 2FA. This workflow then tags the commit
-# and creates the GitHub release. npm accepts the staging through trusted
-# publishing (OIDC): the package's settings on npmjs.com trust this file,
-# release.yml, in the npm environment, so no npm token is stored.
+# on npm yet and the commit builds: the package itself, the Android example and
+# the iOS example. The version goes live when a maintainer approves it on
+# npmjs.com, in the package's Staged Packages tab, with 2FA. This workflow then
+# tags the commit and creates the GitHub release. npm accepts the staging
+# through trusted publishing (OIDC): the package's settings on npmjs.com trust
+# this file, release.yml, in the npm environment, so no npm token is stored.
 
 on:
   push:
@@ -93,8 +93,8 @@ jobs:
         path: '*.tgz'
         if-no-files-found: error
 
-  # Android CI, run again on this commit, so that nothing is published from a
-  # commit whose Kotlin doesn't compile.
+  # Android CI and iOS CI, run again on this commit, so that nothing is published
+  # from a commit whose example app doesn't build.
   android:
     name: Android CI
     needs: check
@@ -103,9 +103,17 @@ jobs:
       contents: read
     uses: ./.github/workflows/android_ci.yml
 
+  ios:
+    name: iOS CI
+    needs: check
+    if: needs.check.outputs.publish == 'true'
+    permissions:
+      contents: read
+    uses: ./.github/workflows/ios_ci.yml
+
   stage:
     name: Stage on npm
-    needs: [ check, build, android ]
+    needs: [ check, build, android, ios ]
     runs-on: ubuntu-latest
     environment:
       name: npm
