@@ -18,10 +18,30 @@
   "keywords": [
     "react-native",
     "expo",
+    "expo-module",
+    "android",
+    "otp",
+    "otp-detector",
+    "otp-autofill",
+    "otp-auto-read",
+    "otp-verification",
+    "one-time-password",
+    "sms",
+    "sms-otp",
+    "sms-retriever",
+    "sms-retriever-api",
+    "sms-user-consent",
+    "sms-user-consent-api",
+    "sms-verification",
+    "phone-verification",
+    "google-play-services",
     "react-native-otp-detector",
     "ReactNativeOtpDetector"
   ],
-  "repository": "https://github.com/Arjit0762/react-native-otp-detector",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Arjit0762/react-native-otp-detector.git"
+  },
   "bugs": {
     "url": "https://github.com/Arjit0762/react-native-otp-detector/issues"
   },
