@@ -1,6 +1,6 @@
 {
   "name": "react-native-otp-detector",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Automatic OTP/SMS detection on Android via both the SMS User Consent API and the SMS Retriever API, with an app-signature-hash helper.",
   "main": "build/index.js",
   "types": "build/index.d.ts",

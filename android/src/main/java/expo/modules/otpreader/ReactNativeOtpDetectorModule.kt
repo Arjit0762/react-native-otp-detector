@@ -32,6 +32,11 @@ class ReactNativeOtpDetectorModule : Module() {
     private var receiverActivity: Activity? = null
     // Regex used to pull the OTP out of the received message. Set when a listen is started.
     private var activeOtpRegex: String = "\\d{4,8}"
+    // True once this module's AppContext is gone (a JS reload, e.g. an OTA update). Play
+    // services can still answer a start*() made just before that, and the SMS for it can
+    // still arrive; neither may register a receiver on, or send an event from, a module
+    // that no longer belongs to a context.
+    @Volatile private var destroyed = false
 
     override fun definition() = ModuleDefinition {
         Name("ReactNativeOtpDetector")
@@ -90,6 +95,7 @@ class ReactNativeOtpDetectorModule : Module() {
         }
 
         OnDestroy {
+            destroyed = true
             unregisterReceiver()
         }
     }
@@ -98,6 +104,8 @@ class ReactNativeOtpDetectorModule : Module() {
         appContext.activityProvider?.currentActivity ?: throw Exception("Activity is null")
 
     private fun registerReceiver(activity: Activity) {
+        // start*() resolved after the module was destroyed: nobody is left to listen.
+        if (destroyed) return
         // Never keep two receivers registered at once.
         unregisterReceiver()
 
@@ -159,7 +167,7 @@ class ReactNativeOtpDetectorModule : Module() {
     private fun handleMessage(message: String) {
         val otp = extractOtp(message, activeOtpRegex)
         if (otp.isNotEmpty()) {
-            sendEvent("onSmsReceived", mapOf("otp" to otp, "message" to message))
+            emit("onSmsReceived", mapOf("otp" to otp, "message" to message))
         } else {
             sendError("No OTP matching /$activeOtpRegex/ found in message")
         }
@@ -167,7 +175,19 @@ class ReactNativeOtpDetectorModule : Module() {
 
     private fun sendError(message: String) {
         Log.e(TAG, message)
-        sendEvent("onOtpError", mapOf("message" to message))
+        emit("onOtpError", mapOf("message" to message))
+    }
+
+    // sendEvent throws once the AppContext has been destroyed ("module ... isn't present in
+    // the module registry"). Here that would be inside BroadcastReceiver.onReceive, which
+    // takes the whole app down, so an event with no context left to receive it is dropped.
+    private fun emit(name: String, body: Map<String, Any?>) {
+        if (destroyed) return
+        try {
+            sendEvent(name, body)
+        } catch (e: Exception) {
+            Log.w(TAG, "Dropped $name: ${e.message}")
+        }
     }
 
     private fun extractOtp(message: String, regex: String): String {
