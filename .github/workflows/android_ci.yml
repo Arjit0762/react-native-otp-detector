@@ -1,0 +1,49 @@
+name: Android CI
+
+# Builds the example app for Android, which compiles the library's Kotlin with
+# it. Release calls this workflow too, on the commit it publishes.
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '**.md'
+  pull_request:
+    branches: [ main ]
+    paths-ignore:
+      - '**.md'
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  android-compile:
+    name: Build the Android example
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+    - uses: actions/checkout@v7
+      with:
+        persist-credentials: false
+    - uses: actions/setup-java@v6
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+    - uses: actions/setup-node@v7
+      with:
+        node-version-file: '.nvmrc'
+        cache: 'yarn'
+        cache-dependency-path: example/yarn.lock
+
+    # example/android is committed, so there is nothing to prebuild. The
+    # example's autolinking takes the library from the repository root
+    # (nativeModulesDir in example/package.json) and compiles it against the
+    # example's own expo-modules-core, so the root needs no node_modules here.
+    - name: Install example node modules
+      run: yarn install --frozen-lockfile
+      working-directory: example
+
+    - name: Compile the example
+      run: ./gradlew assembleDebug -PreactNativeArchitectures=arm64-v8a
+      working-directory: example/android
