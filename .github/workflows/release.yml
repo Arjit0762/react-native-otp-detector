@@ -193,8 +193,20 @@ jobs:
         # when that starts with the tag ("v1.2.3: ..."), and its notes: the
         # description up to its test plan, then links to the pull request and
         # to the changes since the previous release.
-        commit=$(gh api "repos/$GH_REPO/commits?sha=$GITHUB_SHA&path=package.json&per_page=1" --jq '.[0].sha')
-        pr=$(gh api "repos/$GH_REPO/commits/$commit/pulls" --jq '.[0].number // empty')
+        #
+        # That is the pull request of the commit whose own change to package.json
+        # sets this version. It need not be the newest commit that touched the
+        # file: another pull request can change package.json after the bump.
+        pr=""
+        for commit in $(gh api "repos/$GH_REPO/commits?sha=$GITHUB_SHA&path=package.json&per_page=20" --jq '.[].sha'); do
+          if gh api "repos/$GH_REPO/commits/$commit" |
+              jq -e --arg line "\"version\": \"$VERSION\"" '
+                [.files[] | select(.filename == "package.json") | (.patch // "") | split("\n")[]
+                  | select(startswith("+") and contains($line))] | length > 0' > /dev/null; then
+            pr=$(gh api "repos/$GH_REPO/commits/$commit/pulls" --jq '.[0].number // empty')
+            break
+          fi
+        done
         if [ -n "$pr" ]; then
           pr_title=$(gh pr view "$pr" --json title --jq .title)
           case "$pr_title" in
